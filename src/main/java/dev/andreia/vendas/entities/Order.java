@@ -92,6 +92,12 @@ public class Order implements Serializable {
         this.payment = payment;
     }
 
+    public Double getTotal(){
+        return getItems().stream()
+                .mapToDouble(x -> x.getSubTotal())
+                .reduce(0.0, (x, y) -> x + y );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
