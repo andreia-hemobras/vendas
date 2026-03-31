@@ -1,5 +1,6 @@
 package dev.andreia.vendas.resources.exceptions;
 
+import dev.andreia.vendas.services.exceptions.DatabaseException;
 import dev.andreia.vendas.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,20 @@ public class ResourceExceptionHandler {
         );
 
         return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> database(DatabaseException ex, HttpServletRequest request){
+        String error = "Database error";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(),
+                status.value(),
+                error,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(err);
+
     }
 }
